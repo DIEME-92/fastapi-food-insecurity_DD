@@ -212,3 +212,4 @@ if st.button("🔍 Lancer la prédiction"):
         if 'response' in locals():
             st.text(f"Réponse brute : {response.text}")
 
+
