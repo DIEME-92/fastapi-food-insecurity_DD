@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 import joblib
 import pandas as pd
 
-from database import SessionLocal, engine
+# from database import SessionLocal, engine
 from models import Base, PredictionLog
 
 # ✅ Initialisation
@@ -86,3 +86,4 @@ def predict(data: InputData):
             "error": "Une erreur est survenue",
             "details": str(e)
         }, status_code=500)
+
