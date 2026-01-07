@@ -123,7 +123,7 @@ if st.button("🔍 Lancer la prédiction"):
     }
 
     try:
-        response = requests.post("http://127.0.0.1:8000/predict", json=payload)
+        response = requests.post("https://fastapi-food-insecurity-dd.onrender.com", json=payload)
         st.write("Status code:", response.status_code)
         st.write("Raw response:", response.text[:200])  # debug
 
@@ -163,4 +163,5 @@ if st.button("🔍 Lancer la prédiction"):
 
     except Exception as e:
         st.error(f"❌ Erreur lors de la requête : {e}")
+
 
