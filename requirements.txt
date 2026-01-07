@@ -1,3 +1,13 @@
-altair
+fastapi
+uvicorn
 pandas
+joblib
+scikit-learn
 streamlit
+numpy
+matplotlib
+seaborn
+xgboost
+python-dotenv
+sqlalchemy
+psycopg2-binary
