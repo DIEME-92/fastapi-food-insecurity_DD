@@ -14,14 +14,9 @@ joblib==1.4.2
 matplotlib==3.9.2
 seaborn==0.13.2
 
-# Optional: si tu utilises requests pour API calls
+# API calls
 requests==2.32.3
 
-sqlalchemy
-fastapi 
-uvicorn 
-sqlalchemy
-psycopg2-binary 
-pandas
-scikit-learn joblib
-
+# Database
+sqlalchemy==2.0.36
+psycopg2-binary==2.9.10
