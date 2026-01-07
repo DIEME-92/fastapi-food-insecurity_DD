@@ -199,12 +199,13 @@ if st.button("🔍 Lancer la prédiction"):
         if probabilites:
             st.write("### 📊 Répartition des probabilités")
             fig, ax = plt.subplots()
-            labels = list(probabilites.keys())
-            sizes = list(probabilites.values())
+            labels = ["Modérée", "Sévère"]
+            sizes = [probabilites.get("classe_0", 0.0), probabilites.get("classe_1", 0.0)]
             ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90,
-                   colors=['#4CAF50', '#FF9800'])
+                colors=['#4CAF50', '#FF9800'])
             ax.axis('equal')
             st.pyplot(fig)
+
 
     except Exception as e:
         st.error(f"❌ Erreur lors de la requête : {e}")
