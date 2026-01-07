@@ -16,3 +16,12 @@ seaborn==0.13.2
 
 # Optional: si tu utilises requests pour API calls
 requests==2.32.3
+
+sqlalchemy
+fastapi 
+uvicorn 
+sqlalchemy
+psycopg2-binary 
+pandas
+scikit-learn joblib
+
