@@ -4,12 +4,8 @@ from fastapi.responses import JSONResponse
 import joblib
 import pandas as pd
 
-from database import SessionLocal, engine
-from models import Base, PredictionLog
-
 # ✅ Initialisation
 app = FastAPI()
-Base.metadata.create_all(bind=engine)
 
 # ✅ Charger le modèle RandomForest
 rf_model = joblib.load("modele_food_insecurity_D.pkl")
@@ -58,17 +54,6 @@ def predict(data: InputData):
             niveau = "sévère" if prediction_binaire == 1 else "modérée"
             profil = "critique" if prediction_binaire == 1 else "intermédiaire"
 
-        # ✅ Sauvegarde en base
-        db = SessionLocal()
-        log = PredictionLog(
-            niveau=niveau,
-            profil=profil,
-            score=round(float(proba[1]), 4)
-        )
-        db.add(log)
-        db.commit()
-        db.close()
-
         # ✅ Réponse JSON
         return JSONResponse(content={
             "prediction": prediction_binaire,
@@ -86,5 +71,3 @@ def predict(data: InputData):
             "error": "Une erreur est survenue",
             "details": str(e)
         }, status_code=500)
-
-
