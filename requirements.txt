@@ -1,22 +1,13 @@
-# Core web frameworks
-streamlit==1.39.0
 fastapi==0.115.0
 uvicorn==0.32.0
-
-# Data science stack
 pandas==2.2.3
 numpy==1.26.4
 scikit-learn==1.7.1
 xgboost==2.1.2
 joblib==1.4.2
-
-# Visualization
 matplotlib==3.9.2
 seaborn==0.13.2
-
-# API calls
 requests==2.32.3
-
-# Database
 sqlalchemy==2.0.36
 psycopg2-binary==2.9.10
+python-dotenv==1.0.1   # ✅ ajout obligatoire
