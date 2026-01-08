@@ -3,10 +3,11 @@ from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 import joblib
 import pandas as pd
+from database import Base, engine, SessionLocal, PredictionLog, init_db
 
 # ✅ Initialisation
 app = FastAPI()
-
+init_db()
 # ✅ Charger le modèle RandomForest
 rf_model = joblib.load("modele_food_insecurity_D.pkl")
 
@@ -71,3 +72,4 @@ def predict(data: InputData):
             "error": "Une erreur est survenue",
             "details": str(e)
         }, status_code=500)
+
