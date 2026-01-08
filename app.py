@@ -3,15 +3,14 @@ from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 import joblib
 import pandas as pd
-from database import Base, engine, SessionLocal, PredictionLog, init_db
 
-# ✅ Initialisation
+# ✅ Initialisation de l'application
 app = FastAPI()
-init_db()
-# ✅ Charger le modèle RandomForest
+
+# ✅ Charger le modèle RandomForest (assure-toi que le fichier est bien dans ton repo Render)
 rf_model = joblib.load("modele_food_insecurity_D.pkl")
 
-# ✅ Variables utilisées
+# ✅ Variables utilisées pour la prédiction
 selected_features = [
     "q604_manger_moins_que_ce_que_vous_auriez_du",
     "q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent",
@@ -25,7 +24,7 @@ class InputData(BaseModel):
     q604_manger_moins_que_ce_que_vous_auriez_du: int
     q603_sauter_un_repas: int
     q601_ne_pas_manger_nourriture_saine_nutritive: int
-    modele: str = "rf_model"   # valeur par défaut corrigée
+    modele: str = "rf_model"   # valeur par défaut
 
 # ✅ Endpoint de santé
 @app.get("/health")
@@ -72,4 +71,3 @@ def predict(data: InputData):
             "error": "Une erreur est survenue",
             "details": str(e)
         }, status_code=500)
-
