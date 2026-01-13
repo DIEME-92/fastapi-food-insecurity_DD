@@ -10,14 +10,14 @@ app = FastAPI()
 # ✅ Charger le modèle RandomForest (assure-toi que le fichier est bien dans ton repo Render)
 rf_model = joblib.load("modele_food_insecurity_D.pkl")
 
-# ✅ Variables utilisées pour la prédiction
+# ✅ Variables utilisées pour la prédiction individuelle
 selected_features = [
     "q604_manger_moins_que_ce_que_vous_auriez_du",
     "q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent",
     "q606_1_avoir_faim_mais_ne_pas_manger"
 ]
 
-# ✅ Schéma d'entrée
+# ✅ Schéma d'entrée pour prédiction individuelle
 class InputData(BaseModel):
     q606_1_avoir_faim_mais_ne_pas_manger: int
     q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent: int
@@ -31,7 +31,7 @@ class InputData(BaseModel):
 def health_check():
     return {"status": "API opérationnelle ✅"}
 
-# ✅ Endpoint de prédiction
+# ✅ Endpoint de prédiction individuelle
 @app.post("/predict")
 def predict(data: InputData):
     try:
@@ -69,5 +69,38 @@ def predict(data: InputData):
     except Exception as e:
         return JSONResponse(content={
             "error": "Une erreur est survenue",
+            "details": str(e)
+        }, status_code=500)
+
+# ✅ Endpoint de prédiction par région
+@app.post("/predict_by_region")
+def predict_by_region():
+    try:
+        # Charger les données complètes
+        df = pd.read_csv("data_encoded_3.csv")
+
+        # Préparer X (features sans la cible et la région)
+        X = df.drop(columns=["insecurite", "region"])
+        y_pred = rf_model.predict(X)
+
+        # Ajouter les prédictions
+        df["prediction"] = y_pred
+
+        # Agréger par région (moyenne = proportion prédite)
+        resultats_region = (
+            df.groupby("region")["prediction"]
+            .mean()
+            .reset_index()
+            .to_dict(orient="records")
+        )
+
+        # ✅ Réponse JSON
+        return JSONResponse(content={
+            "predictions_par_region": resultats_region
+        })
+
+    except Exception as e:
+        return JSONResponse(content={
+            "error": "Une erreur est survenue lors de la prédiction par région",
             "details": str(e)
         }, status_code=500)
