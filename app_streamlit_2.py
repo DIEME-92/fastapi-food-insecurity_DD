@@ -20,14 +20,14 @@ rf_model = load_models()
 # ✅ Chargement des données
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data_encoded_3.csv")
+    df = pd.read_csv("data_encoded_4.csv")   # ⚠️ utilise ton dataset avec insecurité alimentaire
     return df
 
 df = load_data()
 df_sample = df.sample(100)
 
 if st.sidebar.checkbox("Afficher les données brutes", False):
-    st.subheader("Jeu de données 'data_encoded_3.csv' : Echantillon de 100 observateurs")
+    st.subheader("Jeu de données 'data_encoded_4.csv' : Echantillon de 100 observateurs")
     st.write(df_sample)
 
 st.title("📊 Analyse exploratoire du dataset")
@@ -179,7 +179,7 @@ if st.sidebar.button("Lancer la prédiction par région"):
         st.dataframe(data)
 
         fig, ax = plt.subplots(figsize=(10, 6))
-        sns.barplot(data=data, x="region", y="prediction", palette="viridis", ax=ax)
+        sns.barplot(data=data, x="q100_region", y="prediction", palette="viridis", ax=ax)
         ax.set_title("Prévalence d'insécurité alimentaire par région")
         ax.set_ylabel("Proportion prédite")
         st.pyplot(fig)
