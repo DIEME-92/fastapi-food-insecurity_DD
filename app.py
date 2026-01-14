@@ -32,8 +32,6 @@ def health_check():
 def predict(data: InputData):
     try:
         input_df = pd.DataFrame([data.dict()])
-
-        # Vérifie les colonnes attendues
         input_filtered = input_df[selected_features]
 
         proba = rf_model.predict_proba(input_filtered)[0]
