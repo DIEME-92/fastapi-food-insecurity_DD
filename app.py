@@ -10,7 +10,7 @@ app = FastAPI()
 # ✅ Charger le modèle RandomForest
 rf_model = joblib.load("modele_food_insecurity_D.pkl")
 
-# ✅ Variables utilisées pour la prédiction individuelle ET par région
+# ✅ Variables utilisées pour la prédiction individuelle
 selected_features = [
     "q604_manger_moins_que_ce_que_vous_auriez_du",
     "q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent",
@@ -70,45 +70,4 @@ def predict(data: InputData):
         return JSONResponse(content={
             "error": "Une erreur est survenue",
             "details": str(e)
-        }, status_code=500)
-
-# ✅ Endpoint de prédiction par région
-@app.post("/predict_by_region")
-def predict_by_region():
-    try:
-        # Charger les données complètes
-        df = pd.read_csv("data_encoded_4.csv")
-
-        # Vérifie que les colonnes nécessaires existent
-        for col in selected_features + ["q100_region"]:
-            if col not in df.columns:
-                return JSONResponse(content={
-                    "error": f"La colonne '{col}' est absente du dataset",
-                    "colonnes_disponibles": df.columns.tolist()
-                }, status_code=400)
-
-        # Sélectionner uniquement les colonnes utilisées par le modèle
-        X = df[selected_features]
-
-        # Prédictions
-        y_pred = rf_model.predict(X)
-        df["prediction"] = y_pred
-
-        # Agrégation par région
-        resultats_region = (
-            df.groupby("q100_region")["prediction"]
-            .mean()
-            .reset_index()
-            .to_dict(orient="records")
-        )
-
-        # ✅ Réponse JSON
-        return JSONResponse(content={
-            "predictions_par_region": resultats_region
-        })
-
-    except Exception as e:
-        return JSONResponse(content={
-            "error": "Une erreur est survenue lors de la prédiction par région",
-            "details": str(e)   # ✅ affiche l'erreur exacte pour déboguer
         }, status_code=500)
