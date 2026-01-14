@@ -213,6 +213,3 @@ if st.button("🔍 Lancer la prédiction"):
             st.text(f"Réponse brute : {response.text}")
 
 
-
-
-
