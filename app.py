@@ -10,7 +10,7 @@ app = FastAPI()
 # ✅ Charger le modèle RandomForest
 rf_model = joblib.load("modele_food_insecurity_D.pkl")
 
-# ✅ Variables utilisées pour la prédiction individuelle
+# ✅ Variables utilisées pour la prédiction individuelle ET par région
 selected_features = [
     "q604_manger_moins_que_ce_que_vous_auriez_du",
     "q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent",
@@ -79,20 +79,20 @@ def predict_by_region():
         # Charger les données complètes
         df = pd.read_csv("data_encoded_4.csv")
 
-        # ⚠️ Enlever la colonne cible et la région des features si elles existent
-        colonnes_a_enlever = [col for col in ["insecurite_alimentaire", "q100_region"] if col in df.columns]
-        X = df.drop(columns=colonnes_a_enlever)
+        # Vérifie que les colonnes nécessaires existent
+        for col in selected_features + ["q100_region"]:
+            if col not in df.columns:
+                return JSONResponse(content={
+                    "error": f"La colonne '{col}' est absente du dataset",
+                    "colonnes_disponibles": df.columns.tolist()
+                }, status_code=400)
+
+        # Sélectionner uniquement les colonnes utilisées par le modèle
+        X = df[selected_features]
 
         # Prédictions
         y_pred = rf_model.predict(X)
         df["prediction"] = y_pred
-
-        # Vérifie que la colonne 'q100_region' existe
-        if "q100_region" not in df.columns:
-            return JSONResponse(content={
-                "error": "La colonne 'q100_region' est absente du dataset",
-                "colonnes_disponibles": df.columns.tolist()
-            }, status_code=400)
 
         # Agrégation par région
         resultats_region = (
