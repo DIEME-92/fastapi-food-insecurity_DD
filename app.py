@@ -8,7 +8,7 @@ import pandas as pd
 app = FastAPI()
 
 # ✅ Charger le modèle RandomForest (assure-toi que le fichier est bien dans ton repo Render)
-rf_model = joblib.load("modele_food_insecurity_D.pkl")
+rf_model = joblib.load("modele_food_insecurity_D1.pkl")
 
 # ✅ Variables utilisées pour la prédiction
 selected_features = [
@@ -71,5 +71,6 @@ def predict(data: InputData):
             "error": "Une erreur est survenue",
             "details": str(e)
         }, status_code=500)
+
 
 
