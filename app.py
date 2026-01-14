@@ -110,5 +110,5 @@ def predict_by_region():
     except Exception as e:
         return JSONResponse(content={
             "error": "Une erreur est survenue lors de la prédiction par région",
-            "details": str(e)
+            "details": str(e)   # ✅ affiche l'erreur exacte pour déboguer
         }, status_code=500)
