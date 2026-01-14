@@ -14,7 +14,7 @@ import joblib
 # ✅ Charger les modèles sauvegardés
 @st.cache_resource
 def load_models():
-    rf_model = joblib.load("modele_food_insecurity_D.pkl")   # ou pickle.load(open(...))
+    rf_model = joblib.load("modele_food_insecurity_D1.pkl")   # ou pickle.load(open(...))
     return rf_model
 
 rf_model= load_models()
@@ -211,5 +211,6 @@ if st.button("🔍 Lancer la prédiction"):
         st.error(f"❌ Erreur lors de la requête : {e}")
         if 'response' in locals():
             st.text(f"Réponse brute : {response.text}")
+
 
 
