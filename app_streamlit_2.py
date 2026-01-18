@@ -56,8 +56,8 @@ if st.button("🔍 Lancer la prédiction"):
     input_filtered = input_df[selected_features]
 
     try:
-        # ✅ Prédiction
-        proba = model.predict_proba(input_filtered.values)[0]
+        # ✅ Prédiction (garder DataFrame pour SHAP)
+        proba = model.predict_proba(input_filtered)[0]
         seuil_severe = 0.4
         prediction_binaire = int(proba[1] > seuil_severe)
 
@@ -81,7 +81,7 @@ if st.button("🔍 Lancer la prédiction"):
 
         st.write("📌 Explication des variables (SHAP)")
         fig, ax = plt.subplots()
-        shap.plots.bar(shap_values[0], show=False)   # ✅ shap_values[0] est un objet SHAP
+        shap.plots.bar(shap_values[0], show=False)   # shap_values[0] est bien un objet SHAP
         st.pyplot(fig)
 
     except Exception as e:
