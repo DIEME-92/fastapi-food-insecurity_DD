@@ -9,8 +9,8 @@ import joblib
 ###########################################################
 @st.cache_resource
 def load_models():
-    rf_model = joblib.load("modele_food_insecurity_D1.pkl")
-    xgb_model = joblib.load("modele_xgboost.pkl")   # ⚠️ assure-toi d’avoir sauvegardé ce fichier
+    rf_model = joblib.load("modele_food_insecurity_D1.pkl")   # ⚠️ doit être entraîné avec 5 variables
+    xgb_model = joblib.load("modele_xgboost.pkl")             # ⚠️ doit être entraîné avec 5 variables
     return {"RandomForest": rf_model, "XGBoost": xgb_model}
 
 models = load_models()
@@ -127,7 +127,7 @@ if st.button("🔍 Lancer la prédiction"):
         "q601_ne_pas_manger_nourriture_saine_nutritive": q601
     }])
 
-    # ✅ Inclure toutes les variables dans selected_features
+    # ✅ Les deux modèles utilisent les 5 variables
     selected_features = [
         "q604_manger_moins_que_ce_que_vous_auriez_du",
         "q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent",
@@ -138,19 +138,14 @@ if st.button("🔍 Lancer la prédiction"):
     input_filtered = input_df[selected_features]
 
     try:
-        # 🔹 Cas particulier : si toutes les variables sont à 0
         if input_filtered.sum().sum() == 0:
-            niveau = "aucune"
-            couleur = "🟢"
-            st.write(f"### {couleur} Aucun signe d'insécurité alimentaire (Neutre)")
+            st.write("### 🟢 Aucun signe d'insécurité alimentaire (Neutre)")
             st.write("📊 Score de risque : 0.00")
             st.progress(0.0)
-
         else:
             proba = model.predict_proba(input_filtered)[0]
 
-            # 🔹 Déterminer le niveau de risque
-            seuil_severe = 0.5  # seuil ajustable
+            seuil_severe = 0.5
             if proba[1] >= seuil_severe:
                 niveau = "sévère"
                 couleur = "🔴"
@@ -160,19 +155,16 @@ if st.button("🔍 Lancer la prédiction"):
 
             st.write(f"### {couleur} Niveau d'insécurité alimentaire : {niveau.capitalize()}")
             st.write(f"📊 Score de risque : {round(float(proba[1]), 4)}")
-
-            # ✅ Barre de progression
             st.progress(float(proba[1]))
 
-            # ✅ Affichage des probabilités en cercle (pie chart)
+            # ✅ Pie chart
             st.write("### 📊 Répartition des probabilités")
             fig, ax = plt.subplots()
             labels = ["Modérée", "Sévère"]
             sizes = [proba[0], proba[1]]
             colors = ['#4CAF50', '#FF9800']
-
             ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
-            ax.axis('equal')  # cercle parfait
+            ax.axis('equal')
             st.pyplot(fig)
 
     except Exception as e:
