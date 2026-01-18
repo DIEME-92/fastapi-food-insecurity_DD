@@ -1,5 +1,4 @@
 import streamlit as st
-import requests
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -137,7 +136,16 @@ if st.button("🔍 Lancer la prédiction"):
 
     try:
         proba = model.predict_proba(input_filtered)[0]
-        st.write(f"📊 Probabilités : Modérée = {proba[0]:.2f}, Sévère = {proba[1]:.2f}")
-        st.bar_chart({"Modérée": [proba[0]], "Sévère": [proba[1]]})
+
+        st.write("### 📊 Répartition des probabilités")
+        fig, ax = plt.subplots()
+        labels = ["Modérée", "Sévère"]
+        sizes = [proba[0], proba[1]]
+        colors = ['#4CAF50', '#FF9800']
+
+        ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+        ax.axis('equal')  # cercle parfait
+        st.pyplot(fig)
+
     except Exception as e:
         st.error(f"❌ Erreur lors de la prédiction : {e}")
