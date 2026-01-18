@@ -135,8 +135,6 @@ if st.button("🔍 Lancer la prédiction"):
     input_filtered = input_df[selected_features]
 
     try:
-        proba = model.predict_proba(input_filtered)[0]
-
         # 🔹 Cas particulier : si toutes les variables sont à 0
         if input_filtered.sum().sum() == 0:
             niveau = "aucune"
@@ -146,19 +144,16 @@ if st.button("🔍 Lancer la prédiction"):
             st.progress(0.0)
 
         else:
-            # 🔹 Déterminer le niveau de risque
-            seuil_severe = 0.7
-            seuil_intermediaire = 0.4
+            proba = model.predict_proba(input_filtered)[0]
 
+            # 🔹 Déterminer le niveau de risque
+            seuil_severe = 0.5  # seuil ajustable
             if proba[1] >= seuil_severe:
                 niveau = "sévère"
                 couleur = "🔴"
-            elif proba[1] >= seuil_intermediaire:
-                niveau = "intermédiaire"
-                couleur = "🟠"
             else:
                 niveau = "modérée"
-                couleur = "🟢"
+                couleur = "🟠"
 
             st.write(f"### {couleur} Niveau d'insécurité alimentaire : {niveau.capitalize()}")
             st.write(f"📊 Score de risque : {round(float(proba[1]), 4)}")
