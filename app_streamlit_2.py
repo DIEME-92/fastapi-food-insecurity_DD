@@ -137,36 +137,45 @@ if st.button("🔍 Lancer la prédiction"):
     try:
         proba = model.predict_proba(input_filtered)[0]
 
-        # 🔹 Déterminer le niveau de risque
-        seuil_severe = 0.7
-        seuil_intermediaire = 0.4
-
-        if proba[1] >= seuil_severe:
-            niveau = "sévère"
-            couleur = "🔴"
-        elif proba[1] >= seuil_intermediaire:
-            niveau = "intermédiaire"
-            couleur = "🟠"
-        else:
-            niveau = "modérée"
+        # 🔹 Cas particulier : si toutes les variables sont à 0
+        if input_filtered.sum().sum() == 0:
+            niveau = "aucune"
             couleur = "🟢"
+            st.write(f"### {couleur} Aucun signe d'insécurité alimentaire (Neutre)")
+            st.write("📊 Score de risque : 0.00")
+            st.progress(0.0)
 
-        st.write(f"### {couleur} Niveau d'insécurité alimentaire : {niveau.capitalize()}")
-        st.write(f"📊 Score de risque : {round(float(proba[1]), 4)}")
+        else:
+            # 🔹 Déterminer le niveau de risque
+            seuil_severe = 0.7
+            seuil_intermediaire = 0.4
 
-        # ✅ Barre de progression
-        st.progress(float(proba[1]))
+            if proba[1] >= seuil_severe:
+                niveau = "sévère"
+                couleur = "🔴"
+            elif proba[1] >= seuil_intermediaire:
+                niveau = "intermédiaire"
+                couleur = "🟠"
+            else:
+                niveau = "modérée"
+                couleur = "🟢"
 
-        # ✅ Affichage des probabilités en cercle (pie chart)
-        st.write("### 📊 Répartition des probabilités")
-        fig, ax = plt.subplots()
-        labels = ["Modérée", "Sévère"]
-        sizes = [proba[0], proba[1]]
-        colors = ['#4CAF50', '#FF9800']
+            st.write(f"### {couleur} Niveau d'insécurité alimentaire : {niveau.capitalize()}")
+            st.write(f"📊 Score de risque : {round(float(proba[1]), 4)}")
 
-        ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
-        ax.axis('equal')  # cercle parfait
-        st.pyplot(fig)
+            # ✅ Barre de progression
+            st.progress(float(proba[1]))
+
+            # ✅ Affichage des probabilités en cercle (pie chart)
+            st.write("### 📊 Répartition des probabilités")
+            fig, ax = plt.subplots()
+            labels = ["Modérée", "Sévère"]
+            sizes = [proba[0], proba[1]]
+            colors = ['#4CAF50', '#FF9800']
+
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+            ax.axis('equal')  # cercle parfait
+            st.pyplot(fig)
 
     except Exception as e:
         st.error(f"❌ Erreur lors de la prédiction : {e}")
