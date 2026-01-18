@@ -76,13 +76,15 @@ if st.button("🔍 Lancer la prédiction"):
         st.bar_chart({"Modérée": [proba[0]], "Sévère": [proba[1]]})
 
         # ✅ Explicabilité avec SHAP
+               # ✅ Explicabilité avec SHAP
         explainer = shap.Explainer(model, input_filtered)
-        shap_values = explainer(input_filtered)
+        shap_values = explainer(input_filtered.iloc[0:1])   # slice pour garder DataFrame
 
         st.write("📌 Explication des variables (SHAP)")
         fig, ax = plt.subplots()
-        shap.plots.bar(shap_values[0], show=False)   # shap_values[0] est bien un objet SHAP
+        shap.plots.bar(shap_values, show=False)   # shap_values est un objet SHAP correct
         st.pyplot(fig)
 
     except Exception as e:
         st.error(f"❌ Erreur lors de la prédiction : {e}")
+
