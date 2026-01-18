@@ -137,6 +137,27 @@ if st.button("🔍 Lancer la prédiction"):
     try:
         proba = model.predict_proba(input_filtered)[0]
 
+        # 🔹 Déterminer le niveau de risque
+        seuil_severe = 0.7
+        seuil_intermediaire = 0.4
+
+        if proba[1] >= seuil_severe:
+            niveau = "sévère"
+            couleur = "🔴"
+        elif proba[1] >= seuil_intermediaire:
+            niveau = "intermédiaire"
+            couleur = "🟠"
+        else:
+            niveau = "modérée"
+            couleur = "🟢"
+
+        st.write(f"### {couleur} Niveau d'insécurité alimentaire : {niveau.capitalize()}")
+        st.write(f"📊 Score de risque : {round(float(proba[1]), 4)}")
+
+        # ✅ Barre de progression
+        st.progress(float(proba[1]))
+
+        # ✅ Affichage des probabilités en cercle (pie chart)
         st.write("### 📊 Répartition des probabilités")
         fig, ax = plt.subplots()
         labels = ["Modérée", "Sévère"]
