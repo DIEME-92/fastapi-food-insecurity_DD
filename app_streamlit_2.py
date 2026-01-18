@@ -127,10 +127,13 @@ if st.button("🔍 Lancer la prédiction"):
         "q601_ne_pas_manger_nourriture_saine_nutritive": q601
     }])
 
+    # ✅ Inclure toutes les variables dans selected_features
     selected_features = [
         "q604_manger_moins_que_ce_que_vous_auriez_du",
         "q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent",
-        "q606_1_avoir_faim_mais_ne_pas_manger"
+        "q606_1_avoir_faim_mais_ne_pas_manger",
+        "q603_sauter_un_repas",
+        "q601_ne_pas_manger_nourriture_saine_nutritive"
     ]
     input_filtered = input_df[selected_features]
 
