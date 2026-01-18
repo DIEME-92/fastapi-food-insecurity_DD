@@ -82,9 +82,10 @@ if st.button("🔍 Lancer la prédiction"):
 
         st.write("📌 Explication des variables (SHAP)")
         fig, ax = plt.subplots()
-        shap.plots.bar(shap_values, show=False)   # shap_values est un objet SHAP correct
+        shap.plots.bar(shap_values, show=False)   # affiche directement l’explication de la première ligne
         st.pyplot(fig)
 
     except Exception as e:
         st.error(f"❌ Erreur lors de la prédiction : {e}")
+
 
