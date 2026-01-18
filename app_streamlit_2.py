@@ -81,7 +81,7 @@ if st.button("🔍 Lancer la prédiction"):
 
         st.write("📌 Explication des variables (SHAP)")
         fig, ax = plt.subplots()
-        shap.plots.bar(shap_values[0], show=False)
+        shap.plots.bar(shap_values[0], show=False)   # ✅ shap_values[0] est un objet SHAP
         st.pyplot(fig)
 
     except Exception as e:
