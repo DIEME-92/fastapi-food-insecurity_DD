@@ -166,8 +166,8 @@ if st.button("🔍 Lancer la prédiction"):
     }
 
     try:
-        # ⚠️ Mets ici l’URL correcte de ton API (local ou Render)
-        response = requests.post("https://fastapi-food-insecurity-dd-1.onrender.com/predict", json=payload)
+        # ⚠️ Mets ici l’URL correcte de ton API (local ou Render) 
+        response = requests.post("https://fastapi-food-insecurity-d1.onrender.com/predict", json=payload)
         response.raise_for_status()  # lève une erreur si 404/500
 
         try:
@@ -211,6 +211,7 @@ if st.button("🔍 Lancer la prédiction"):
         st.error(f"❌ Erreur lors de la requête : {e}")
         if 'response' in locals():
             st.text(f"Réponse brute : {response.text}")
+
 
 
 
