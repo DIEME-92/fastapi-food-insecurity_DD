@@ -12,9 +12,12 @@ rf_model = joblib.load("modele_food_insecurity_D1.pkl")
 
 # Variables utilisées pour la prédiction individuelle
 selected_features = [
+    "604_manger_moins_que_ce_que_vous_auriez_du",
     "q604_manger_moins_que_ce_que_vous_auriez_du",
     "q605_1_ne_plus_avoir_de_nourriture_pas_suffisamment_d_argent",
-    "q606_1_avoir_faim_mais_ne_pas_manger"
+    "q606_1_avoir_faim_mais_ne_pas_manger",
+    "q607_1_passer_toute_une_journee_sans_manger"
+    
 ]
 
 # Schéma d'entrée pour prédiction individuelle
@@ -70,4 +73,5 @@ def predict(data: InputData):
             "error": "Une erreur est survenue",
             "details": str(e)
         }, status_code=500)
+
 
